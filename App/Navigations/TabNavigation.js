@@ -7,13 +7,24 @@ import SosAlert from "../Screens/SosAlert";
 import { FontAwesome } from "@expo/vector-icons";
 import LineNumber from "../Screens/LineNumber";
 import { MaterialIcons } from "@expo/vector-icons";
-import Contact from "../Screens/Contact";
-import { FontAwesome6 } from "@expo/vector-icons";
-
 export default function TabNavigation() {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+    // screenOptions={{
+    //   headerShown: false,
+    // }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="home" color={color} size={size} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="SosAlert"
         component={SosAlert}
@@ -35,32 +46,16 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="LineNumber"
+        name="Line Number"
         component={LineNumber}
         options={{
           tabBarLabel: "Line Number",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="local-police" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Contact"
-        component={Contact}
-        options={{
-          tabBarLabel: "Contact",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome6 name="contact-book" size={size} color={color} />
+            <FontAwesome
+              name="volume-control-phone"
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
