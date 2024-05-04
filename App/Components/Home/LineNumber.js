@@ -5,7 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 export default function LineNumber() {
   return (
     <View>
-      <FontAwesome name="volume-control-phone" size={50} color="white" />
+      <FontAwesome name="volume-control-phone" size={44} color="white" />
     </View>
   );
 }
