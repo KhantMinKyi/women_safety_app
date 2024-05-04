@@ -4,6 +4,7 @@ import SosAlert from "./SosAlert";
 import Siren from "./Siren";
 import { Link } from "@react-navigation/native";
 import LineNumber from "./LineNumber";
+import Contact from "./Contact";
 
 export default function ButtonGroup() {
   return (
@@ -26,7 +27,14 @@ export default function ButtonGroup() {
           </Link>
           <Text style={{ color: "white", marginTop: 10 }}>Helpline Number</Text>
         </View>
-        <View style={[styles.column, styles.faqView]}></View>
+        <View style={[styles.column, styles.faqView]}>
+          <Link to={{ screen: Contact }}>
+            <Contact></Contact>
+          </Link>
+          <Text style={{ color: "white", marginTop: 10 }}>
+            Favorite Contact
+          </Text>
+        </View>
       </View>
     </React.Fragment>
   );

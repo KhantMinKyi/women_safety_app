@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 export default function Siren() {
   return (
     <View>
-      <FontAwesome name="bell" size={40} color="white" />
+      <FontAwesome name="bell" size={36} color="white" />
     </View>
   );
 }
