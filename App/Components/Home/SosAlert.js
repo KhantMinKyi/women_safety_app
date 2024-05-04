@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function SosAlert() {
   return (
     <View style={{ alignContent: "center" }}>
-      <MaterialIcons name="sos" size={64} color="white" />
+      {/* <Text>SosAlert</Text> */}
+      <MaterialIcons name="sos" size={60} color="white" />
     </View>
   );
 }

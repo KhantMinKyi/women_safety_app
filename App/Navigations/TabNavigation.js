@@ -10,11 +10,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 export default function TabNavigation() {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator
-    // screenOptions={{
-    //   headerShown: false,
-    // }}
-    >
+    <Tab.Navigator>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -46,7 +42,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Line Number"
+        name="LineNumber"
         component={LineNumber}
         options={{
           tabBarLabel: "Line Number",
