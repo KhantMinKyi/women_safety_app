@@ -5,7 +5,7 @@ import ButtonGroup from "../Components/Home/ButtonGroup";
 
 export default function Home() {
   return (
-    <View>
+    <View style={{ backgroundColor: "#FFF2F0" }}>
       <Header />
       <ButtonGroup />
     </View>
