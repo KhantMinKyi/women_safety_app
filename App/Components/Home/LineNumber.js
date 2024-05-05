@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { FontAwesome } from "@expo/vector-icons";
 
+import { MaterialIcons } from "@expo/vector-icons";
 export default function LineNumber() {
   return (
     <View>
-      <FontAwesome name="volume-control-phone" size={44} color="white" />
+      <MaterialIcons name="local-police" size={44} color="white" />
     </View>
   );
 }

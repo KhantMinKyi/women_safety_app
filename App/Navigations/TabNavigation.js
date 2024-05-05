@@ -9,6 +9,7 @@ import LineNumber from "../Screens/LineNumber";
 import { MaterialIcons } from "@expo/vector-icons";
 import Contact from "../Screens/Contact";
 import { FontAwesome6 } from "@expo/vector-icons";
+
 export default function TabNavigation() {
   const Tab = createBottomTabNavigator();
   return (
@@ -49,11 +50,7 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Line Number",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome
-              name="volume-control-phone"
-              color={color}
-              size={size}
-            />
+            <MaterialIcons name="local-police" size={size} color={color} />
           ),
         }}
       />

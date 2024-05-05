@@ -1,33 +1,41 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 export default function SosAlert() {
   return (
-    <React.Fragment>
-      <View style={[styles.container, styles.containerBgColor]}>
-        <Text style={styles.headerText}>Emergency Alert</Text>
-        <Text style={styles.secondText}>
-          Press RED if you are in danger ,{"\n"} Press Green if you are Safe
-        </Text>
-        <TouchableOpacity style={[styles.startButton, styles.sosButton]}>
-          <View style={styles.container}>
-            <MaterialIcons name="add-alert" size={70} color="white" />
-            <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
-              SOS Alert
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.stopButton, styles.sosButton]}>
-          <View style={styles.container}>
-            <AntDesign name="Safety" size={70} color="white" />
-            <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
-              Safe
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </React.Fragment>
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <React.Fragment>
+        <View style={[styles.container, styles.containerBgColor]}>
+          <Text style={styles.headerText}>Emergency Alert</Text>
+          <Text style={styles.secondText}>
+            Press RED if you are in danger ,{"\n"} Press Green if you are Safe
+          </Text>
+          <TouchableOpacity style={[styles.startButton, styles.sosButton]}>
+            <View style={styles.container}>
+              <MaterialIcons name="add-alert" size={70} color="white" />
+              <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
+                SOS Alert
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.stopButton, styles.sosButton]}>
+            <View style={styles.container}>
+              <AntDesign name="Safety" size={70} color="white" />
+              <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
+                Safe
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </React.Fragment>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -60,5 +68,8 @@ const styles = StyleSheet.create({
   },
   stopButton: {
     backgroundColor: "darkseagreen",
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
   },
 });
