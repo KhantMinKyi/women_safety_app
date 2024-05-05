@@ -3,7 +3,7 @@ import React from "react";
 
 export default function LineNumber() {
   return (
-    <View>
+    <View style={{ backgroundColor: "#FFF2F0" }}>
       <Text>LineNumber</Text>
     </View>
   );

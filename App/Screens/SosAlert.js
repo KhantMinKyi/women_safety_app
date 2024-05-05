@@ -5,7 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 export default function SosAlert() {
   return (
     <React.Fragment>
-      <View style={styles.container}>
+      <View style={[styles.container, styles.containerBgColor]}>
         <Text style={styles.headerText}>Emergency Alert</Text>
         <Text style={styles.secondText}>
           Press RED if you are in danger ,{"\n"} Press Green if you are Safe
@@ -31,6 +31,9 @@ export default function SosAlert() {
   );
 }
 const styles = StyleSheet.create({
+  containerBgColor: {
+    backgroundColor: "#FFF2F0",
+  },
   container: {
     flex: 1,
     justifyContent: "center", // Center vertically
