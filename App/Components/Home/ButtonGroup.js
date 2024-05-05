@@ -1,42 +1,49 @@
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import SosAlert from "./SosAlert";
 import Siren from "./Siren";
-import { Link } from "@react-navigation/native";
+import { Link, useNavigation } from "@react-navigation/native";
 import LineNumber from "./LineNumber";
 import Contact from "./Contact";
 
 export default function ButtonGroup() {
+  const navigation = useNavigation();
   return (
-    <React.Fragment>
-      <View style={styles.container}>
-        <View style={[styles.column, styles.sosView]}>
-          <Link to={{ screen: SosAlert }}>
-            <SosAlert></SosAlert>
-          </Link>
-        </View>
-        <View style={[styles.column, styles.sirenView]}>
-          <Link to={{ screen: Siren }}>
-            <Siren></Siren>
-          </Link>
-          <Text style={{ color: "white", marginTop: 10 }}>Siren Sound</Text>
-        </View>
-        <View style={[styles.column, styles.lineNumberView]}>
-          <Link to={{ screen: LineNumber }}>
-            <LineNumber></LineNumber>
-          </Link>
-          <Text style={{ color: "white", marginTop: 10 }}>Helpline Number</Text>
-        </View>
-        <View style={[styles.column, styles.faqView]}>
-          <Link to={{ screen: Contact }}>
-            <Contact></Contact>
-          </Link>
-          <Text style={{ color: "white", marginTop: 10 }}>
-            Favorite Contact
-          </Text>
-        </View>
-      </View>
-    </React.Fragment>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={[styles.column, styles.sosView]}
+        onPress={() => navigation.navigate("SosAlert")}
+      >
+        <SosAlert></SosAlert>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.column, styles.sirenView]}
+        onPress={() => navigation.navigate("Siren")}
+      >
+        <Siren></Siren>
+        <Text style={{ color: "white", marginTop: 10 }}>Siren Sound</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.column, styles.lineNumberView]}
+        onPress={() => navigation.navigate("LineNumber")}
+      >
+        <LineNumber></LineNumber>
+        <Text style={{ color: "white", marginTop: 10 }}>Helpline Number</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.column, styles.faqView]}
+        onPress={() => navigation.navigate("Contact")}
+      >
+        <Contact></Contact>
+        <Text style={{ color: "white", marginTop: 10 }}>Favorite Contact</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 const styles = StyleSheet.create({
