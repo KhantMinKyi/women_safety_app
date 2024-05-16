@@ -5,10 +5,31 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import * as Location from "expo-location";
 export default function SosAlert() {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const handleButtonPress = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+
+    const currentLocation = await Location.getCurrentPositionAsync({});
+    setLocation(currentLocation);
+  };
+
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
+  }
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <React.Fragment>
@@ -17,7 +38,10 @@ export default function SosAlert() {
           <Text style={styles.secondText}>
             Press RED if you are in danger ,{"\n"} Press Green if you are Safe
           </Text>
-          <TouchableOpacity style={[styles.startButton, styles.sosButton]}>
+          <TouchableOpacity
+            style={[styles.startButton, styles.sosButton]}
+            onPress={handleButtonPress}
+          >
             <View style={styles.container}>
               <MaterialIcons name="add-alert" size={70} color="white" />
               <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
@@ -34,6 +58,7 @@ export default function SosAlert() {
             </View>
           </TouchableOpacity>
         </View>
+        <Text style={styles.paragraph}>{text}</Text>
       </React.Fragment>
     </ScrollView>
   );
