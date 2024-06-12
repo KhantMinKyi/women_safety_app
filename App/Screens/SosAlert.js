@@ -4,14 +4,53 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { Accelerometer } from "expo-sensors";
 export default function SosAlert() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [shakeCount, setShakeCount] = useState(0);
+
+  useEffect(() => {
+    let previousTime = new Date().getTime();
+    let shakeTimes = 0;
+
+    const subscription = Accelerometer.addListener((accelerometerData) => {
+      const { x, y, z } = accelerometerData;
+      const currentTime = new Date().getTime();
+
+      // Calculate the acceleration magnitude
+      const magnitude = Math.sqrt(x * x + y * y + z * z);
+
+      // Threshold for a shake (you might need to adjust this value)
+      const shakeThreshold = 1.5;
+
+      if (magnitude > shakeThreshold) {
+        if (currentTime - previousTime > 1000) {
+          previousTime = currentTime;
+          shakeTimes += 1;
+          // console.log(shakeTimes);
+          if (shakeTimes >= 3) {
+            // Alert.alert("Hello");
+            handleButtonPress();
+            shakeTimes = 0; // Reset the shake count after the alert
+          }
+        }
+      }
+    });
+
+    // Accelerometer settings
+    Accelerometer.setUpdateInterval(100); // Update interval in milliseconds
+
+    return () => {
+      subscription && subscription.remove();
+    };
+  }, []);
 
   const handleButtonPress = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -25,10 +64,14 @@ export default function SosAlert() {
   };
 
   let text = "Waiting..";
+  let lat = "Waiting..";
+  let long = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
+    lat = location.coords.latitude;
+    long = location.coords.longitude;
   }
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -58,7 +101,9 @@ export default function SosAlert() {
             </View>
           </TouchableOpacity>
         </View>
-        <Text style={styles.paragraph}>{text}</Text>
+        <Text style={styles.paragraph}>
+          https://www.google.com/maps/search/?api=1&query={lat},{long}
+        </Text>
       </React.Fragment>
     </ScrollView>
   );
