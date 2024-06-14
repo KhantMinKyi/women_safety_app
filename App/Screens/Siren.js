@@ -1,7 +1,31 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
-
+import React, { useRef, useState } from "react";
+import { Audio } from "expo-av";
 export default function Siren() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const soundRef = useRef(null);
+
+  const playSiren = async () => {
+    if (soundRef.current) {
+      await soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/police-siren.mp3"),
+      { shouldPlay: true, isLooping: true }
+    );
+    soundRef.current = sound;
+    setIsPlaying(true);
+  };
+
+  const stopSiren = async () => {
+    if (soundRef.current) {
+      await soundRef.current.stopAsync();
+      await soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
+    setIsPlaying(false);
+  };
   return (
     <React.Fragment>
       <View style={styles.headerTextView}>
@@ -18,12 +42,18 @@ export default function Siren() {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={[styles.sirenButtom, styles.startButtonStyle]}
+            onPress={playSiren}
+            disabled={isPlaying}
           >
             <View style={styles.container}>
               <Text style={styles.textStyle}>Start</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.sirenButtom, styles.endButtonStyle]}>
+          <TouchableOpacity
+            style={[styles.sirenButtom, styles.endButtonStyle]}
+            onPress={stopSiren}
+            disabled={!isPlaying}
+          >
             <View style={styles.container}>
               <Text style={styles.textStyle}>Stop</Text>
             </View>
