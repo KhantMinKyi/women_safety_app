@@ -129,6 +129,7 @@ export default function Contact() {
               onChangeText={setFirstNumber}
               placeholder="First Number"
               value={firstNumber}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.textView}>
@@ -138,6 +139,7 @@ export default function Contact() {
               onChangeText={setSecondNumber}
               placeholder="Second Number"
               value={secondNumber}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.textView}>
@@ -147,6 +149,7 @@ export default function Contact() {
               onChangeText={setThirdNumber}
               placeholder="Third Number"
               value={thirdNumber}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.textView}>
@@ -156,6 +159,7 @@ export default function Contact() {
               onChangeText={setFourthNumber}
               placeholder="Fourth Number"
               value={fourthNumber}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.textView}>
@@ -165,6 +169,7 @@ export default function Contact() {
               onChangeText={setFifthNumber}
               placeholder="Fifth Number"
               value={fifthNumber}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.button}>
@@ -172,6 +177,7 @@ export default function Contact() {
               title="Save Numbers"
               onPress={saveNumbers}
               color="#48d1cc"
+              z
             />
           </View>
         </ScrollView>
