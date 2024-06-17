@@ -1,8 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Linking } from "react-native";
 import React from "react";
 import { DataTable } from "react-native-paper";
 
 export default function LineNumber() {
+  const makeCall = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
   return (
     <View style={styles.container}>
       <DataTable>
@@ -12,19 +15,27 @@ export default function LineNumber() {
         </DataTable.Header>
         <DataTable.Row style={styles.row}>
           <DataTable.Cell>Emergency Number</DataTable.Cell>
-          <DataTable.Cell numeric>190</DataTable.Cell>
+          <DataTable.Cell numeric onPress={() => makeCall("190")}>
+            190
+          </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row style={styles.row}>
           <DataTable.Cell>Fire Number</DataTable.Cell>
-          <DataTable.Cell numeric>191</DataTable.Cell>
+          <DataTable.Cell numeric onPress={() => makeCall("191")}>
+            191
+          </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row style={styles.row}>
           <DataTable.Cell>Ambulance Number</DataTable.Cell>
-          <DataTable.Cell numeric>192</DataTable.Cell>
+          <DataTable.Cell numeric onPress={() => makeCall("192")}>
+            192
+          </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row style={styles.row}>
           <DataTable.Cell>Police Number</DataTable.Cell>
-          <DataTable.Cell numeric>199 </DataTable.Cell>
+          <DataTable.Cell numeric onPress={() => makeCall("199")}>
+            199{" "}
+          </DataTable.Cell>
         </DataTable.Row>
       </DataTable>
     </View>
