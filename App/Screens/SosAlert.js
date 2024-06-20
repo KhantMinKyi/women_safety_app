@@ -6,13 +6,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { Accelerometer } from "expo-sensors";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SendDirectSms } from "react-native-send-direct-sms";
 export default function SosAlert() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -22,13 +23,14 @@ export default function SosAlert() {
   const [thirdNumber, setThirdNumber] = useState("");
   const [fourthNumber, setFourthNumber] = useState("");
   const [fifthNumber, setFifthNumber] = useState("");
-
+  const intervalId = useRef(null);
   useFocusEffect(
     useCallback(() => {
       getData();
       let previousTime = new Date().getTime();
       let shakeTimes = 0;
 
+      // Shake Function
       const subscription = Accelerometer.addListener((accelerometerData) => {
         const { x, y, z } = accelerometerData;
         const currentTime = new Date().getTime();
@@ -43,10 +45,10 @@ export default function SosAlert() {
           if (currentTime - previousTime > 1000) {
             previousTime = currentTime;
             shakeTimes += 1;
-            console.log(shakeTimes);
+            // console.log(shakeTimes);
             if (shakeTimes >= 3) {
               // Alert.alert("Hello");
-              handleButtonPress();
+              startFunction();
               shakeTimes = 0; // Reset the shake count after the alert
             }
           }
@@ -61,6 +63,27 @@ export default function SosAlert() {
       };
     }, [])
   );
+
+  useEffect(() => {
+    if (location) {
+      sendSms();
+    }
+  }, [location]);
+
+  // Start and Stop Every 30s
+  const startFunction = () => {
+    handleButtonPress();
+    intervalId.current = setInterval(() => {
+      handleButtonPress();
+    }, 3000); // 30000 milliseconds = 30 seconds
+  };
+  const stopFunction = () => {
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+      intervalId.current = null;
+    }
+  };
+  // Get Phone Number
   const getData = async () => {
     const values = await AsyncStorage.multiGet([
       "@firstNumber",
@@ -70,7 +93,7 @@ export default function SosAlert() {
       "@fifthNumber",
     ]);
     values.forEach((value) => {
-      console.log(JSON.parse(value[1]));
+      // console.log(JSON.parse(value[1]));
       if (value[0] === "@firstNumber") {
         setFirstNumber(JSON.parse(value[1]));
       } else if (value[0] === "@secondNumber") {
@@ -96,16 +119,48 @@ export default function SosAlert() {
     setLocation(currentLocation);
   };
 
-  let text = "Waiting..";
-  let lat = "Waiting..";
-  let long = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
-    lat = location.coords.latitude;
-    long = location.coords.longitude;
-  }
+  // send sms
+  const sendSms = () => {
+    if (location) {
+      let phoneNumberArary = [];
+      lat = location.coords.latitude;
+      long = location.coords.longitude;
+      text = `User is In Danger ! User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
+      demo = "Hello Testing 1 2 3 ";
+      if (firstNumber) {
+        phoneNumberArary.push(firstNumber);
+      }
+      if (secondNumber) {
+        phoneNumberArary.push(secondNumber);
+      }
+      if (thirdNumber) {
+        phoneNumberArary.push(thirdNumber);
+      }
+      if (fourthNumber) {
+        phoneNumberArary.push(fourthNumber);
+      }
+      if (fifthNumber) {
+        phoneNumberArary.push(fifthNumber);
+      }
+      // console.log(text);
+      // phoneNumberArary.map((number) => {
+      //   SendDirectSms(number, text)
+      //     .then((res) => console.log("then", res))
+      //     .catch((err) => console.log("catch", err));
+      // });
+    }
+  };
+
+  // let text = "Waiting..";
+  // let lat = "Waiting..";
+  // let long = "Waiting..";
+  // if (errorMsg) {
+  //   text = errorMsg;
+  // } else if (location) {
+  //   text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
+  //   lat = location.coords.latitude;
+  //   long = location.coords.longitude;
+  // }
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <React.Fragment>
@@ -116,7 +171,7 @@ export default function SosAlert() {
           </Text>
           <TouchableOpacity
             style={[styles.startButton, styles.sosButton]}
-            onPress={handleButtonPress}
+            onPress={startFunction}
           >
             <View style={styles.container}>
               <MaterialIcons name="add-alert" size={70} color="white" />
@@ -125,7 +180,10 @@ export default function SosAlert() {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.stopButton, styles.sosButton]}>
+          <TouchableOpacity
+            style={[styles.stopButton, styles.sosButton]}
+            onPress={stopFunction}
+          >
             <View style={styles.container}>
               <AntDesign name="Safety" size={70} color="white" />
               <Text style={{ color: "white", fontSize: 14, marginTop: 10 }}>
@@ -134,10 +192,10 @@ export default function SosAlert() {
             </View>
           </TouchableOpacity>
         </View>
-        <Text style={styles.paragraph}>
+        {/* <Text style={styles.paragraph}>
           https://www.google.com/maps/search/?api=1&query={lat},{long}
         </Text>
-        <Text style={styles.paragraph}>{firstNumber}</Text>
+        <Text style={styles.paragraph}>{firstNumber}</Text> */}
       </React.Fragment>
     </ScrollView>
   );
