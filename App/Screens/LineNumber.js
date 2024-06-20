@@ -1,11 +1,17 @@
 import { View, Text, StyleSheet, Linking } from "react-native";
 import React from "react";
 import { DataTable } from "react-native-paper";
+// import { SendDirectSms } from "react-native-send-direct-sms";
 
 export default function LineNumber() {
   const makeCall = (phoneNumber) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
+  // function sendSmsData(mobileNumber, bodySMS) {
+  //   SendDirectSms(mobileNumber, bodySMS)
+  //     .then((res) => console.log("then", res))
+  //     .catch((err) => console.log("catch", err));
+  // }
   return (
     <View style={styles.container}>
       <DataTable>

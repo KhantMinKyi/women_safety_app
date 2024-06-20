@@ -44,7 +44,7 @@ export default function Contact() {
       "@fifthNumber",
     ]);
     values.forEach((value) => {
-      console.log(JSON.parse(value[1]));
+      // console.log(JSON.parse(value[1]));
       if (value[0] === "@firstNumber") {
         setFirstNumber(JSON.parse(value[1]));
       } else if (value[0] === "@secondNumber") {
