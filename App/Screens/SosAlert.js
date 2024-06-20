@@ -75,7 +75,7 @@ export default function SosAlert() {
     handleButtonPress();
     intervalId.current = setInterval(() => {
       handleButtonPress();
-    }, 3000); // 30000 milliseconds = 30 seconds
+    }, 30000); // 30000 milliseconds = 30 seconds
   };
   const stopFunction = () => {
     if (intervalId.current) {
@@ -125,7 +125,7 @@ export default function SosAlert() {
       let phoneNumberArary = [];
       lat = location.coords.latitude;
       long = location.coords.longitude;
-      text = `User is In Danger ! User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
+      let text = `User is In Danger ! User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
       demo = "Hello Testing 1 2 3 ";
       if (firstNumber) {
         phoneNumberArary.push(firstNumber);
@@ -143,11 +143,11 @@ export default function SosAlert() {
         phoneNumberArary.push(fifthNumber);
       }
       // console.log(text);
-      // phoneNumberArary.map((number) => {
-      //   SendDirectSms(number, text)
-      //     .then((res) => console.log("then", res))
-      //     .catch((err) => console.log("catch", err));
-      // });
+      phoneNumberArary.map((number) => {
+        SendDirectSms(number, text)
+          .then((res) => console.log("then", res))
+          .catch((err) => console.log("catch", err));
+      });
     }
   };
 
