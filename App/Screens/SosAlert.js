@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,6 +15,23 @@ import { Accelerometer } from "expo-sensors";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SendDirectSms } from "react-native-send-direct-sms";
+const CustomAlert = ({ visible, message, onClose }) => {
+  return (
+    <Modal
+      transparent={true}
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>{message}</Text>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 export default function SosAlert() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -23,13 +41,15 @@ export default function SosAlert() {
   const [thirdNumber, setThirdNumber] = useState("");
   const [fourthNumber, setFourthNumber] = useState("");
   const [fifthNumber, setFifthNumber] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [disabled, setDisabled] = useState(0);
+  var isWorking = 0;
   const intervalId = useRef(null);
   useFocusEffect(
     useCallback(() => {
       getData();
       let previousTime = new Date().getTime();
       let shakeTimes = 0;
-
       // Shake Function
       const subscription = Accelerometer.addListener((accelerometerData) => {
         const { x, y, z } = accelerometerData;
@@ -45,9 +65,11 @@ export default function SosAlert() {
           if (currentTime - previousTime > 1000) {
             previousTime = currentTime;
             shakeTimes += 1;
-            // console.log(shakeTimes);
+            setAlertVisible(true);
+            setTimeout(() => {
+              setAlertVisible(false);
+            }, 1000);
             if (shakeTimes >= 3) {
-              // Alert.alert("Hello");
               startFunction();
               shakeTimes = 0; // Reset the shake count after the alert
             }
@@ -71,18 +93,27 @@ export default function SosAlert() {
   }, [location]);
 
   // Start and Stop Every 30s
-  const startFunction = () => {
-    handleButtonPress();
-    intervalId.current = setInterval(() => {
+  const startFunction = useCallback(() => {
+    if (isWorking == 0) {
       handleButtonPress();
-    }, 30000); // 30000 milliseconds = 30 seconds
-  };
-  const stopFunction = () => {
+      isWorking = 1;
+      setDisabled(1);
+      intervalId.current = setInterval(() => {
+        handleButtonPress();
+      }, 10000);
+    } else if (isWorking == 1) {
+      console.log("Stop");
+    }
+  }, []);
+  const stopFunction = useCallback(() => {
+    isWorking = 0;
+    setDisabled(0);
+    console.log("Stop");
     if (intervalId.current) {
       clearInterval(intervalId.current);
       intervalId.current = null;
     }
-  };
+  }, []);
   // Get Phone Number
   const getData = async () => {
     const values = await AsyncStorage.multiGet([
@@ -93,7 +124,6 @@ export default function SosAlert() {
       "@fifthNumber",
     ]);
     values.forEach((value) => {
-      // console.log(JSON.parse(value[1]));
       if (value[0] === "@firstNumber") {
         setFirstNumber(JSON.parse(value[1]));
       } else if (value[0] === "@secondNumber") {
@@ -125,7 +155,8 @@ export default function SosAlert() {
       let phoneNumberArary = [];
       lat = location.coords.latitude;
       long = location.coords.longitude;
-      let text = `User is In Danger ! User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
+      let text = ` Emergency SOS ! I'm in Danger Now . 
+       User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
       demo = "Hello Testing 1 2 3 ";
       if (firstNumber) {
         phoneNumberArary.push(firstNumber);
@@ -142,36 +173,35 @@ export default function SosAlert() {
       if (fifthNumber) {
         phoneNumberArary.push(fifthNumber);
       }
-      // console.log(text);
       phoneNumberArary.map((number) => {
-        SendDirectSms(number, text)
-          .then((res) => console.log("then", res))
-          .catch((err) => console.log("catch", err));
+        // SendDirectSms(number, text)
+        //   .then((res) => console.log("then", res))
+        //   .catch((err) => console.log("catch", err));
+        console.log(number);
       });
     }
   };
 
-  // let text = "Waiting..";
-  // let lat = "Waiting..";
-  // let long = "Waiting..";
-  // if (errorMsg) {
-  //   text = errorMsg;
-  // } else if (location) {
-  //   text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
-  //   lat = location.coords.latitude;
-  //   long = location.coords.longitude;
-  // }
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <React.Fragment>
+        <CustomAlert
+          visible={alertVisible}
+          message="Your Device is Shaked !"
+          onClose={() => setAlertVisible(false)}
+        />
         <View style={[styles.container, styles.containerBgColor]}>
           <Text style={styles.headerText}>Emergency Alert</Text>
           <Text style={styles.secondText}>
             Press RED if you are in danger ,{"\n"} Press Green if you are Safe
           </Text>
           <TouchableOpacity
-            style={[styles.startButton, styles.sosButton]}
+            style={[
+              styles.sosButton,
+              disabled === 1 ? styles.disabledButton : styles.startButton,
+            ]}
             onPress={startFunction}
+            disabled={disabled === 1 ? true : false}
           >
             <View style={styles.container}>
               <MaterialIcons name="add-alert" size={70} color="white" />
@@ -192,10 +222,6 @@ export default function SosAlert() {
             </View>
           </TouchableOpacity>
         </View>
-        {/* <Text style={styles.paragraph}>
-          https://www.google.com/maps/search/?api=1&query={lat},{long}
-        </Text>
-        <Text style={styles.paragraph}>{firstNumber}</Text> */}
       </React.Fragment>
     </ScrollView>
   );
@@ -233,5 +259,33 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     flexGrow: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  disabledButton: {
+    backgroundColor: "gray",
   },
 });
