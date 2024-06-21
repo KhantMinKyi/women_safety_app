@@ -100,7 +100,7 @@ export default function SosAlert() {
       setDisabled(1);
       intervalId.current = setInterval(() => {
         handleButtonPress();
-      }, 10000);
+      }, 30000);
     } else if (isWorking == 1) {
       console.log("Stop");
     }
@@ -156,7 +156,7 @@ export default function SosAlert() {
       lat = location.coords.latitude;
       long = location.coords.longitude;
       let text = ` Emergency SOS ! I'm in Danger Now . 
-       User Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
+       My Location is https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
       demo = "Hello Testing 1 2 3 ";
       if (firstNumber) {
         phoneNumberArary.push(firstNumber);
@@ -174,9 +174,9 @@ export default function SosAlert() {
         phoneNumberArary.push(fifthNumber);
       }
       phoneNumberArary.map((number) => {
-        // SendDirectSms(number, text)
-        //   .then((res) => console.log("then", res))
-        //   .catch((err) => console.log("catch", err));
+        SendDirectSms(number, text)
+          .then((res) => console.log("then", res))
+          .catch((err) => console.log("catch", err));
         console.log(number);
       });
     }
