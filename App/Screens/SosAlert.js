@@ -15,7 +15,23 @@ import { Accelerometer } from "expo-sensors";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SendDirectSms } from "react-native-send-direct-sms";
-const CustomAlert = ({ visible, message, onClose }) => {
+const ShakeAlert = ({ visible, message, onClose }) => {
+  return (
+    <Modal
+      transparent={true}
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>{message}</Text>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+const SmsAlert = ({ visible, message, onClose }) => {
   return (
     <Modal
       transparent={true}
@@ -42,6 +58,7 @@ export default function SosAlert() {
   const [fourthNumber, setFourthNumber] = useState("");
   const [fifthNumber, setFifthNumber] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
+  const [smsAlertVisible, setSmsAlertVisible] = useState(false);
   const [disabled, setDisabled] = useState(0);
   var isWorking = 0;
   const intervalId = useRef(null);
@@ -179,16 +196,25 @@ export default function SosAlert() {
           .catch((err) => console.log("catch", err));
         console.log(number);
       });
+      setSmsAlertVisible(true);
+      setTimeout(() => {
+        setSmsAlertVisible(false);
+      }, 1000);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <React.Fragment>
-        <CustomAlert
+        <ShakeAlert
           visible={alertVisible}
           message="Your Device is Shaked !"
           onClose={() => setAlertVisible(false)}
+        />
+        <SmsAlert
+          visible={smsAlertVisible}
+          message="Your Message is Sent !"
+          onClose={() => smsAlertVisible(false)}
         />
         <View style={[styles.container, styles.containerBgColor]}>
           <Text style={styles.headerText}>Emergency Alert</Text>

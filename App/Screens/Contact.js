@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   PermissionsAndroid,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -104,6 +105,41 @@ export default function Contact() {
   useEffect(() => {
     getData();
   }, []);
+  const handleFirstTextChange = (text) => {
+    if (text.length <= 12) {
+      setFirstNumber(text);
+    } else {
+      Alert.alert("Limit Exceeded", "The Maximum Phone Number is 12.");
+    }
+  };
+  const handleSecondTextChange = (text) => {
+    if (text.length <= 12) {
+      setSecondNumber(text);
+    } else {
+      Alert.alert("Limit Exceeded", "The Maximum Phone Number is 12.");
+    }
+  };
+  const handleThirdTextChange = (text) => {
+    if (text.length <= 12) {
+      setThirdNumber(text);
+    } else {
+      Alert.alert("Limit Exceeded", "The Maximum Phone Number is 12.");
+    }
+  };
+  const handleFourthTextChange = (text) => {
+    if (text.length <= 12) {
+      setFourthNumber(text);
+    } else {
+      Alert.alert("Limit Exceeded", "The Maximum Phone Number is 12.");
+    }
+  };
+  const handleFifthTextChange = (text) => {
+    if (text.length <= 12) {
+      setFifthNumber(text);
+    } else {
+      Alert.alert("Limit Exceeded", "The Maximum Phone Number is 12.");
+    }
+  };
   return (
     <View style={styles.container}>
       {isloading ? (
@@ -126,17 +162,18 @@ export default function Contact() {
             <Text style={styles.label}> First Number :</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={setFirstNumber}
+              onChangeText={handleFirstTextChange}
               placeholder="First Number"
               value={firstNumber}
               keyboardType="numeric"
+              // maxLength={4}
             />
           </View>
           <View style={styles.textView}>
             <Text style={styles.label}> Second Number :</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={setSecondNumber}
+              onChangeText={handleSecondTextChange}
               placeholder="Second Number"
               value={secondNumber}
               keyboardType="numeric"
@@ -146,7 +183,7 @@ export default function Contact() {
             <Text style={styles.label}> Third Number :</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={setThirdNumber}
+              onChangeText={handleThirdTextChange}
               placeholder="Third Number"
               value={thirdNumber}
               keyboardType="numeric"
@@ -156,7 +193,7 @@ export default function Contact() {
             <Text style={styles.label}> Fourth Number :</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={setFourthNumber}
+              onChangeText={handleFourthTextChange}
               placeholder="Fourth Number"
               value={fourthNumber}
               keyboardType="numeric"
@@ -166,7 +203,7 @@ export default function Contact() {
             <Text style={styles.label}> Fifth Number :</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={setFifthNumber}
+              onChangeText={handleFifthTextChange}
               placeholder="Fifth Number"
               value={fifthNumber}
               keyboardType="numeric"
@@ -177,7 +214,6 @@ export default function Contact() {
               title="Save Numbers"
               onPress={saveNumbers}
               color="#48d1cc"
-              z
             />
           </View>
         </ScrollView>
